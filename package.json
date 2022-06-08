@@ -1,0 +1,25 @@
+{
+  "name": "nestjs-mvc",
+  "packageManager": "yarn@3.2.1",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "web:dev": "yarn workspace web dev",
+    "web:build": "yarn workspace web build",
+    "web:start": "yarn workspace web start",
+    "web:lint": "yarn workspace web lint"
+  },
+  "devDependencies": {
+    "@yarnpkg/sdks": "^3.0.0-rc.6",
+    "eslint": "^8.17.0",
+    "flow-bin": "^0.179.0",
+    "prettier": "^2.6.2",
+    "typescript": "^4.7.3",
+    "typescript-language-server": "^0.11.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.3"
+  }
+}
