@@ -11,29 +11,29 @@ import { UserModule } from '../user/user.module';
 import { RefreshStrategy } from './strategy/refresh.strategy';
 
 @Module({
-	imports: [
-		UserModule,
-		PassportModule,
-		JwtModule.register({
-			secret: process.env.AUTH_SECRET_KEY,
-			signOptions: {
-				expiresIn: process.env.TOKEN_EXPIRES_TIME || '60s',
-				algorithm: 'HS256',
-			},
-		}),
-	],
-	providers: [
-		AuthService,
-		LocalStrategy,
-		JwtStrategy,
-		RefreshStrategy,
-		{
-			// APP_GUARD register guard to all routes
-			provide: APP_GUARD,
-			useClass: JwtAuthGuard,
-		},
-	],
-	exports: [AuthService],
-	controllers: [AuthController],
+  imports: [
+    UserModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.AUTH_SECRET_KEY,
+      signOptions: {
+        expiresIn: process.env.TOKEN_EXPIRES_TIME || '60s',
+        algorithm: 'HS256',
+      },
+    }),
+  ],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    RefreshStrategy,
+    {
+      // APP_GUARD register guard to all routes
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
+  exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}

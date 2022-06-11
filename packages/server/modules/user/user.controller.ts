@@ -5,19 +5,15 @@ import { UserService } from '@/server/modules/user/user.service';
 
 @Controller('user')
 export class UserController {
-	private userService: UserService;
-	constructor() {}
+  constructor(private userService: UserService) {}
 
-	@Put()
-	updateCurrentUser(
-		@Body() data: UserDTO,
-		@Identify() email: string,
-	): Promise<any> {
-		return this.userService.updateCurrentUser(data, email);
-	}
+  @Put()
+  updateCurrentUser(@Body() data: UserDTO, @Identify() email: string): Promise<any> {
+    return this.userService.updateCurrentUser(data, email);
+  }
 
-	@Get('profile')
-	getProfile(@Request() req: any) {
-		return req.user;
-	}
+  @Get('profile')
+  getProfile(@Request() req: any) {
+    return req.user;
+  }
 }

@@ -1,45 +1,38 @@
 import 'reflect-metadata';
-import * as http from 'http';
-import { NextApiHandler } from 'next';
 import { NestFactory } from '@nestjs/core';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '@/server/modules/app/app.module';
+import { HttpResponseInterceptor, HttpExceptionFilter } from '@/server/common/http';
+import { SwaggerConfig } from '@/server/configs';
+import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import * as csurf from 'csurf';
-declare const module: any;
+import * as compression from 'compression';
 
-export module Backend {
-	let app: INestApplication;
+const bootstrap = async () => {
+  const app = await NestFactory.create<INestApplication>(AppModule);
+  app.use(helmet());
+  app.use(compression());
+  app.enableCors();
+  app.enableVersioning();
+  app.use(cookieParser());
+  app.use(
+    csurf({
+      cookie: true,
+    }),
+  );
 
-	export async function getApp() {
-		if (!app) {
-			app = await NestFactory.create(AppModule, { bodyParser: false });
-			app.setGlobalPrefix('api');
-			app.use(cookieParser());
-			app.use(
-				csurf({
-					cookie: true,
-				}),
-			);
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new HttpResponseInterceptor());
+  app.useGlobalPipes(new ValidationPipe());
 
-			await app.init();
-		}
+  //   app.setGlobalPrefix(AppModule.apiPrefix);
+  //   SwaggerConfig(app, AppModule.apiVersion);
 
-		if (module.hot) {
-			module.hot.accept();
-			module.hot.dispose(() => app.close());
-		}
+  //   await app.listen(AppModule.port);
+  return app;
+};
 
-		return app;
-	}
-
-	export async function getListener() {
-		const app = await getApp();
-		const server: http.Server = app.getHttpServer();
-		const [listener] = server.listeners('request') as NextApiHandler[];
-
-		Logger.log(`server starting on ${process.env.API_URL}`);
-
-		return listener;
-	}
-}
+bootstrap().then((port: number) => {
+  Logger.log(`Application running on: http://localhost:${port}`, 'Main');
+});

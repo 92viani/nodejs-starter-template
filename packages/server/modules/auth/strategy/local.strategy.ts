@@ -6,22 +6,22 @@ import { CurrentUser } from '../models/current-user';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-	constructor(private authService: AuthService) {
-		super();
-	}
+  constructor(private authService: AuthService) {
+    super();
+  }
 
-	async validate(username: string, password: string): Promise<any> {
-		const user = await this.authService.validateUser(username, password);
-		if (!user) {
-			throw new UnauthorizedException();
-		}
-		return Promise.resolve(
-			new CurrentUser({
-				userId: user.id,
-				fullName: user.name,
-				username: user.username,
-				email: user.email,
-			}),
-		);
-	}
+  async validate(username: string, password: string): Promise<any> {
+    const user = await this.authService.validateUser(username, password);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return Promise.resolve(
+      new CurrentUser({
+        userId: user.id,
+        fullName: user.name,
+        username: user.username,
+        email: user.email,
+      }),
+    );
+  }
 }

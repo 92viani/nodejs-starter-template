@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "antd": "^4.21.0",
     "antd-jalali": "^1.0.3",
     "dayjs": "^1.11.3",

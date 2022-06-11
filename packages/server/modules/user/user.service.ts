@@ -4,17 +4,17 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService extends Repository<UserEntity> {
-	async updateCurrentUser(data: UserEntity | any, email: string): Promise<any> {
-		return await this.update({}, data);
-	}
+  async updateCurrentUser(data: UserEntity | any, email: string): Promise<any> {
+    return await this.update({}, data);
+  }
 
-	async fackUser(username: string) {
-		return await Promise.resolve({
-			username: 'm.viani',
-			password: '123456',
-			id: Date.now(),
-			fullName: 'Mohammad Viani',
-			email: 'viani@outlook.com',
-		});
-	}
+  async fackUser(username: string) {
+    return await Promise.resolve({
+      username: 'm.viani',
+      password: '123456',
+      id: Date.now(),
+      fullName: 'Mohammad Viani',
+      email: 'viani@outlook.com',
+    });
+  }
 }

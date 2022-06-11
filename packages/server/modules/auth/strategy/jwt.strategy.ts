@@ -6,31 +6,31 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-	constructor() {
-		super({
-			secretOrKey: process.env.AUTH_SECRET_KEY,
-			ignoreExpiration: false,
+  constructor() {
+    super({
+      secretOrKey: process.env.AUTH_SECRET_KEY,
+      ignoreExpiration: false,
 
-			// extract token from Ahutorize header
-			//jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-			jwtFromRequest: ExtractJwt.fromExtractors([
-				(request: Request) => {
-					try {
-						const authCookie = AuthService.getAuthCookie(request);
-						if (!authCookie) return null;
-						return authCookie.accessToken;
-					} catch (error) {
-						return null;
-					}
-				},
-			]),
-		});
-	}
+      // extract token from Ahutorize header
+      //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          try {
+            const authCookie = AuthService.getAuthCookie(request);
+            if (!authCookie) return null;
+            return authCookie.accessToken;
+          } catch (error) {
+            return null;
+          }
+        },
+      ]),
+    });
+  }
 
-	async validate(payload: any) {
-		if (payload === null) {
-			throw new UnauthorizedException();
-		}
-		return { userId: payload.sub, username: payload.username };
-	}
+  async validate(payload: any) {
+    if (payload === null) {
+      throw new UnauthorizedException();
+    }
+    return { userId: payload.sub, username: payload.username };
+  }
 }
